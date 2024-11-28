@@ -2,6 +2,10 @@ package lab2.validator;
 
 import lab2.validator.ValidatorDemo;
 
+/**
+ * Provides validation methods without using reflection.
+ * Manually validates the fields of an object.
+ */
 public class NonReflectionValidator {
 
   // Метод для перевірки валідності об'єкта без використання рефлексії

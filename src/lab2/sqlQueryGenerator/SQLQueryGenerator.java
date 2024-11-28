@@ -2,12 +2,16 @@ package lab2.sqlQueryGenerator;
 
 import java.lang.reflect.Field;
 
+/**
+ * Generates SQL queries for CRUD operations based on field mappings.
+ */
 public class SQLQueryGenerator {
 
   // Метод для генерації SQL-запиту на створення (CREATE)
   public String create(Object obj) {
     StringBuilder query = new StringBuilder("INSERT INTO ");
-    String tableName = obj.getClass().getSimpleName().toLowerCase(); // Ім'я таблиці відповідає імені класу
+    String tableName = obj.getClass().getSimpleName()
+        .toLowerCase(); // Ім'я таблиці відповідає імені класу
     query.append(tableName).append(" (");
 
     StringBuilder values = new StringBuilder("VALUES (");
@@ -34,7 +38,8 @@ public class SQLQueryGenerator {
   // Метод для генерації SQL-запиту на читання (READ)
   public String read(Object obj) {
     StringBuilder query = new StringBuilder("SELECT * FROM ");
-    String tableName = obj.getClass().getSimpleName().toLowerCase(); // Ім'я таблиці відповідає імені класу
+    String tableName = obj.getClass().getSimpleName()
+        .toLowerCase(); // Ім'я таблиці відповідає імені класу
     query.append(tableName).append(" WHERE ");
 
     Field[] fields = obj.getClass().getDeclaredFields();
@@ -58,7 +63,8 @@ public class SQLQueryGenerator {
   // Метод для генерації SQL-запиту на оновлення (UPDATE)
   public String update(Object obj) {
     StringBuilder query = new StringBuilder("UPDATE ");
-    String tableName = obj.getClass().getSimpleName().toLowerCase(); // Ім'я таблиці відповідає імені класу
+    String tableName = obj.getClass().getSimpleName()
+        .toLowerCase(); // Ім'я таблиці відповідає імені класу
     query.append(tableName).append(" SET ");
 
     Field[] fields = obj.getClass().getDeclaredFields();
@@ -82,7 +88,8 @@ public class SQLQueryGenerator {
   // Метод для генерації SQL-запиту на видалення (DELETE)
   public String delete(Object obj) {
     StringBuilder query = new StringBuilder("DELETE FROM ");
-    String tableName = obj.getClass().getSimpleName().toLowerCase(); // Ім'я таблиці відповідає імені класу
+    String tableName = obj.getClass().getSimpleName()
+        .toLowerCase(); // Ім'я таблиці відповідає імені класу
     query.append(tableName).append(" WHERE id = ?;");
     return query.toString();
   }

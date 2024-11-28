@@ -5,7 +5,13 @@ import lab2.serializer.SerializerDemo;
 import lab2.sqlQueryGenerator.SQLQueryGeneratorDemo;
 import lab2.validator.ValidatorDemo;
 
+/**
+ * The main class for executing the program.
+ * Based on the student ID, it determines which task to execute:
+ * SQL query generation, object serialization, or field validation.
+ */
 public class Main {
+
   public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
 

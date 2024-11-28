@@ -7,7 +7,12 @@ import lab2.annotations.FieldMapping;
     @FieldColumn(field = "name", column = "user_name"),
     @FieldColumn(field = "age", column = "user_age")
 })
+/**
+ * Demonstrates the generation of SQL queries.
+ * This class showcases how SQL queries can be dynamically generated based on inputs.
+ */
 public class SQLQueryGeneratorDemo {
+
   private String name;
   private int age;
 

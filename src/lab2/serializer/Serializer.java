@@ -5,6 +5,9 @@ import lab2.annotations.FieldMapping;
 
 import java.lang.reflect.Field;
 
+/**
+ * Provides methods to serialize and deserialize objects to and from JSON format.
+ */
 public class Serializer {
 
   public String toJSON(Object obj) {

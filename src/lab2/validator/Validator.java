@@ -8,6 +8,11 @@ import lab2.annotations.MinValue;
 import lab2.annotations.NotNull;
 import lab2.annotations.StringLength;
 
+/**
+ * Validates the fields of an object using custom annotations.
+ * Checks whether the annotated fields meet the specified constraints such as
+ * non-null values, minimum and maximum numeric values, and string length limits.
+ */
 public class Validator {
 
   // Метод для перевірки валідності об'єкта

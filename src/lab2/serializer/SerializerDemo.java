@@ -10,8 +10,13 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 // Клас для демонстрації серіалізації
+/**
+ * Demonstrates the serialization of objects.
+ * This class showcases how objects can be serialized and deserialized.
+ */
 @XmlRootElement // Для JAXB
 public class SerializerDemo {
+
   private String name;
   private int age;
 

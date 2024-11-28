@@ -1,5 +1,9 @@
 package lab2.validator;
 
+/**
+ * Tests the performance of different validation approaches, including reflection-based
+ * and non-reflection-based validation.
+ */
 public class ValidatorPerformanceTest {
 
   public static void main(String[] args) {
