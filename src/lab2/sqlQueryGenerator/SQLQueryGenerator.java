@@ -1,33 +1,41 @@
 package lab2.sqlQueryGenerator;
 
 import java.lang.reflect.Field;
+import lab3.annotations.Column;
+import lab3.annotations.Table;
 
 /**
- * Generates SQL queries for CRUD operations based on field mappings.
+ * Generates SQL queries for CRUD operations based on annotated fields and table mappings.
  */
 public class SQLQueryGenerator {
 
   // Метод для генерації SQL-запиту на створення (CREATE)
   public String create(Object obj) {
     StringBuilder query = new StringBuilder("INSERT INTO ");
-    String tableName = obj.getClass().getSimpleName()
-        .toLowerCase(); // Ім'я таблиці відповідає імені класу
+    String tableName = getTableName(obj); // Отримуємо назву таблиці
     query.append(tableName).append(" (");
 
     StringBuilder values = new StringBuilder("VALUES (");
-    Field[] fields = obj.getClass().getDeclaredFields(); // Отримуємо всі поля класу
-    for (int i = 0; i < fields.length; i++) {
-      fields[i].setAccessible(true); // Робимо поле доступним для читання
-      try {
-        Object value = fields[i].get(obj); // Отримуємо значення поля
-        query.append(fields[i].getName());
-        values.append("'").append(value).append("'");
-        if (i < fields.length - 1) {
+    Field[] fields = obj.getClass().getDeclaredFields();
+    boolean firstField = true;
+
+    for (Field field : fields) {
+      field.setAccessible(true);
+      Column column = field.getAnnotation(Column.class);
+      if (column != null) {
+        if (!firstField) {
           query.append(", ");
           values.append(", ");
         }
-      } catch (IllegalAccessException e) {
-        e.printStackTrace();
+        firstField = false;
+
+        query.append(column.name());
+        try {
+          Object value = field.get(obj);
+          values.append("'").append(value).append("'");
+        } catch (IllegalAccessException e) {
+          throw new RuntimeException("Cannot access field value: " + field.getName(), e);
+        }
       }
     }
 
@@ -38,21 +46,27 @@ public class SQLQueryGenerator {
   // Метод для генерації SQL-запиту на читання (READ)
   public String read(Object obj) {
     StringBuilder query = new StringBuilder("SELECT * FROM ");
-    String tableName = obj.getClass().getSimpleName()
-        .toLowerCase(); // Ім'я таблиці відповідає імені класу
+    String tableName = getTableName(obj);
     query.append(tableName).append(" WHERE ");
 
     Field[] fields = obj.getClass().getDeclaredFields();
-    for (int i = 0; i < fields.length; i++) {
-      fields[i].setAccessible(true);
-      try {
-        Object value = fields[i].get(obj);
-        query.append(fields[i].getName()).append(" = '").append(value).append("'");
-        if (i < fields.length - 1) {
+    boolean firstCondition = true;
+
+    for (Field field : fields) {
+      field.setAccessible(true);
+      Column column = field.getAnnotation(Column.class);
+      if (column != null) {
+        if (!firstCondition) {
           query.append(" AND ");
         }
-      } catch (IllegalAccessException e) {
-        e.printStackTrace();
+        firstCondition = false;
+
+        try {
+          Object value = field.get(obj);
+          query.append(column.name()).append(" = '").append(value).append("'");
+        } catch (IllegalAccessException e) {
+          throw new RuntimeException("Cannot access field value: " + field.getName(), e);
+        }
       }
     }
 
@@ -63,34 +77,49 @@ public class SQLQueryGenerator {
   // Метод для генерації SQL-запиту на оновлення (UPDATE)
   public String update(Object obj) {
     StringBuilder query = new StringBuilder("UPDATE ");
-    String tableName = obj.getClass().getSimpleName()
-        .toLowerCase(); // Ім'я таблиці відповідає імені класу
+    String tableName = getTableName(obj);
     query.append(tableName).append(" SET ");
 
     Field[] fields = obj.getClass().getDeclaredFields();
-    for (int i = 0; i < fields.length; i++) {
-      fields[i].setAccessible(true);
-      try {
-        Object value = fields[i].get(obj);
-        query.append(fields[i].getName()).append(" = '").append(value).append("'");
-        if (i < fields.length - 1) {
+    boolean firstField = true;
+
+    for (Field field : fields) {
+      field.setAccessible(true);
+      Column column = field.getAnnotation(Column.class);
+      if (column != null) {
+        if (!firstField) {
           query.append(", ");
         }
-      } catch (IllegalAccessException e) {
-        e.printStackTrace();
+        firstField = false;
+
+        try {
+          Object value = field.get(obj);
+          query.append(column.name()).append(" = '").append(value).append("'");
+        } catch (IllegalAccessException e) {
+          throw new RuntimeException("Cannot access field value: " + field.getName(), e);
+        }
       }
     }
 
-    query.append(" WHERE id = ?;"); // Використовуємо ? для параметра id
+    query.append(" WHERE id = ?;");
     return query.toString();
   }
 
   // Метод для генерації SQL-запиту на видалення (DELETE)
   public String delete(Object obj) {
     StringBuilder query = new StringBuilder("DELETE FROM ");
-    String tableName = obj.getClass().getSimpleName()
-        .toLowerCase(); // Ім'я таблиці відповідає імені класу
+    String tableName = getTableName(obj);
     query.append(tableName).append(" WHERE id = ?;");
     return query.toString();
+  }
+
+  // Метод для отримання назви таблиці через анотацію
+  private String getTableName(Object obj) {
+    Table table = obj.getClass().getAnnotation(Table.class);
+    if (table == null) {
+      throw new RuntimeException(
+          "Class " + obj.getClass().getName() + " is not annotated with @Table.");
+    }
+    return table.name();
   }
 }

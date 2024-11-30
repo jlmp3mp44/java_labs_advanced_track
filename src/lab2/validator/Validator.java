@@ -9,9 +9,9 @@ import lab2.annotations.NotNull;
 import lab2.annotations.StringLength;
 
 /**
- * Validates the fields of an object using custom annotations.
- * Checks whether the annotated fields meet the specified constraints such as
- * non-null values, minimum and maximum numeric values, and string length limits.
+ * Validates the fields of an object using custom annotations. Checks whether the annotated fields
+ * meet the specified constraints such as non-null values, minimum and maximum numeric values, and
+ * string length limits.
  */
 public class Validator {
 
@@ -75,7 +75,7 @@ public class Validator {
           Object value = field.get(obj);
           if (value instanceof String) {
             String strValue = (String) value;
-            if (strValue.length() > stringLengthAnnotation.max()) {
+            if (strValue.length() > stringLengthAnnotation.maxLength()) {
               errorMessages.add("Field " + field.getName() + " exceeds max length.");
             }
             if (strValue.length() < stringLengthAnnotation.min()) {

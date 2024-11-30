@@ -7,9 +7,9 @@ import lab2.annotations.StringLength;
 import lab2.validator.Validator;
 
 /**
- * A demonstration class for validating objects using custom annotations.
- * This class ensures that the fields of an object comply with specified constraints,
- * such as non-null values, value ranges, and string length restrictions.
+ * A demonstration class for validating objects using custom annotations. This class ensures that
+ * the fields of an object comply with specified constraints, such as non-null values, value ranges,
+ * and string length restrictions.
  */
 public class ValidatorDemo {
 
@@ -20,7 +20,7 @@ public class ValidatorDemo {
   @MaxValue(100)
   private int age;
 
-  @StringLength(min = 5, max = 10)
+  @StringLength(min = 5, maxLength = 10)
   private String address;
 
   public ValidatorDemo(String name, int age, String address) {
